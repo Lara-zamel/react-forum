@@ -1,17 +1,25 @@
 import {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+
+import {FaHome} from 'react-icons/fa';
 
 function FForm() {
     const [formData,setFormData] = useState({
+        id:uuidv4(),
         title:'',
         description:'',
         archived:false,
         category:[]
     });
 
+    const navigate = useNavigate();
+
     const onSubmit = (e) =>{
         e.preventDefault();
         
         setLocalStorage();
+        navigate('/');
     };
     
     const onChange = (e) =>{
@@ -23,7 +31,6 @@ function FForm() {
         }
 
         else if(e.target.id == 'category'){
-            console.log(e.target.value);
             let newCategory = formData.category;
             if(!newCategory.includes(e.target.value)){
                 newCategory.push(e.target.value);
@@ -41,16 +48,21 @@ function FForm() {
         }
         
     };
-
     const setLocalStorage = () =>{
-        localStorage.setItem('forumItems',JSON.stringify(formData));
-        console.log(JSON.parse(localStorage.getItem('forumItems')));
-
+        const LSForums = JSON.parse(localStorage.getItem('forumItems'));
+        const forums = LSForums ? LSForums : [];
+        setFormData({
+            ...formData,
+        });
+        forums.push(formData);
+        // setting localstorage
+        localStorage.setItem('forumItems',JSON.stringify(forums));
     };
 
     const {title,category,description,archived} = formData;
   return (
-  <form className='container mx-auto' onSubmit={onSubmit}>
+      <div className='container mx-auto'>
+  <form  onSubmit={onSubmit}>
       <div className="form-control">
           <label className="label">
               <span className="label-text">Title</span>
@@ -62,10 +74,15 @@ function FForm() {
                <span className="label-text">Category</span>
            </label>
            <select name="category" id="category" className="select select-bordered select-sm" value={category} multiple required onChange={onChange}>
-               <option value="kitchen">kitchen</option>
+               <option value=".NetCore">.NetCore</option>
                <option value="computer">computer</option>
-               <option value="housing">housing</option>
+               <option value="Android">Android</option>
                <option value="programming">programming</option>
+               <option value="React">React</option>
+               <option value="Vue">Vue</option>
+               <option value="Angular">Angular</option>
+               <option value="IOS">IOS</option>
+
            </select>
        </div>
        <div className="form-control flex-row mt-4">
@@ -82,6 +99,13 @@ function FForm() {
     </div>
     <button className="btn btn-primary mt-2" type="submit">Submit</button>
   </form>
+  <div className="flex justify-end">
+    <Link to="/">
+        <FaHome className='inline-block mb-1'/>
+        <p className='inline-block ml-2'> Home </p>
+    </Link>
+  </div>
+  </div>
   );
 }
 
