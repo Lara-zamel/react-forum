@@ -2,15 +2,15 @@ import {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import {FaHome} from 'react-icons/fa';
-
+import GoHome from '../components/GoHome';
 function FForm() {
     const [formData,setFormData] = useState({
         id:uuidv4(),
         title:'',
         description:'',
         archived:false,
-        category:[]
+        category:[],
+        replies:[]
     });
 
     const navigate = useNavigate();
@@ -86,7 +86,7 @@ function FForm() {
            </select>
        </div>
        <div className="form-control flex-row mt-4">
-       <input type="checkbox" className="checkbox" id="archived" onChange={onChange} />
+       <input type="checkbox" className="checkbox toggle" id="archived" onChange={onChange} />
        <label className="label p-0 pl-2">
            <span className="label-text">Archived</span>
        </label>
@@ -99,12 +99,7 @@ function FForm() {
     </div>
     <button className="btn btn-primary mt-2" type="submit">Submit</button>
   </form>
-  <div className="flex justify-end">
-    <Link to="/">
-        <FaHome className='inline-block mb-1'/>
-        <p className='inline-block ml-2'> Home </p>
-    </Link>
-  </div>
+  <GoHome/>
   </div>
   );
 }
